@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/complete"
+        android:icon="@drawable/icon_complete"
+        android:title="Đã giao"
+        />
+    <item
+        android:id="@+id/canceled"
+        android:icon="@drawable/icon_cancel_order"
+        android:title="Đã huỷ"
+        android:visible="false"
+        />
+    <item
+        android:id="@+id/delivery"
+        android:icon="@drawable/icon_delivery"
+        android:title="Đang giao"
+        android:visible="false"
+
+        />
+    <item
+        android:id="@+id/processing"
+        android:icon="@drawable/icon_processing"
+        android:title="Đang xửa lý"
+        android:visible="false"
+
+        />
+</menu>
