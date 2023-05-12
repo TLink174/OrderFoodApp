@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orderfood_app.R
+import com.example.orderfood_app.models.Product
 
 
-data class Product(val id: Int, val name: String, val image: Int, val loacation: String, val valueLocation: String)
 class ProductAdapter(
     private val products: ArrayList<Product>,
     private val listener: OnItemClickListener
@@ -25,10 +27,12 @@ class ProductAdapter(
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
         val product = products[position]
-        holder.productImage.setImageResource(product.image)
+        holder.productImage.load(product.image)
         holder.productName.text = product.name
         holder.productLocation.text = product.loacation
-        holder.productValueLocation.text = product.valueLocation
+        holder.productDescription.text = product.description
+        holder.productPrice.text = product.price
+        holder.productRating.rating = product.rating
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position)
         }
@@ -42,7 +46,9 @@ class ProductAdapter(
         val productImage: ImageView = itemView.findViewById<ImageView>(R.id.product_image)
         val productName: TextView = itemView.findViewById<TextView>(R.id.product_name)
         val productLocation: TextView = itemView.findViewById<TextView>(R.id.location_product_lable)
-        val productValueLocation: TextView = itemView.findViewById<TextView>(R.id.value_location)
+        val productDescription: TextView = itemView.findViewById<TextView>(R.id.category_product)
+        val productPrice: TextView = itemView.findViewById<TextView>(R.id.price)
+        val productRating: RatingBar = itemView.findViewById<RatingBar>(R.id.product_ratingBar)
 
 
     }

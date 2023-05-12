@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orderfood_app.R
+import com.example.orderfood_app.models.Slide
 
 
-data class Slide(val id: Int, val name: String, val image: Int)
 class SlideAdapter(
     private val slides: ArrayList<Slide>,
     private val listener: OnItemClickListener
@@ -25,7 +26,7 @@ class SlideAdapter(
     override fun onBindViewHolder(holder: SlideViewHolder, position: Int) {
 
         val slide = slides[position]
-        holder.slideImage.setImageResource(slide.image)
+        holder.slideImage.load(slide.image)
 //        holder.slideName.text = slide.name
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position)

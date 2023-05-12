@@ -42,6 +42,7 @@ class AccountFragment : Fragment() {
 
             (activity as? OnThemeChangeListener)?.onThemeChanged()
         }
+
         return view
     }
 

@@ -10,15 +10,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orderfood_app.R
 import com.example.orderfood_app.adapters.OnItemClickListener
-import com.example.orderfood_app.adapters.Restaurant
 import com.example.orderfood_app.adapters.RestaurantAdapter
+import com.example.orderfood_app.models.Restaurant
+import com.example.orderfood_app.services.RestaurantCallback
+import com.example.orderfood_app.services.RestaurantService
 
-class RetaurantFragment : Fragment() {
+class RetaurantFragment : Fragment(), OnItemClickListener, RestaurantCallback {
+
+    lateinit var restaurantService: RestaurantService
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
         }
+
+        restaurantService = RestaurantService(this)
+        restaurantService.getAll()
     }
 
     override fun onCreateView(
@@ -26,29 +32,30 @@ class RetaurantFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_retaurant, container, false)
-
-        val detailRestaurantRecyclerView = view.findViewById<RecyclerView>(R.id.detail_restaurant_recycler_view)
-        detailRestaurantRecyclerView.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        val initListRestaurant = initListRestaurant()
-        detailRestaurantRecyclerView.adapter = RestaurantAdapter(initListRestaurant, object :
-            OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-                Toast.makeText(context, initListRestaurant[position].name, Toast.LENGTH_SHORT).show()
-            }
-        })
+        val view = inflater.inflate(R.layout.fragment_retaurant, container, false)
 
         return view
     }
 
-    private fun initListRestaurant(): ArrayList<Restaurant> {
-        val list = ArrayList<Restaurant>()
-        list.add(Restaurant(1, "Home", R.drawable.okokokok, "Da Nang", "5,6 km"))
-        list.add(Restaurant(2, "Search", R.drawable.okokokok, "Da Nang", "5,6 km"))
-        list.add(Restaurant(3, "Order", R.drawable.okokokok, "Da Nang", "5,6 km"))
-        list.add(Restaurant(4, "Account", R.drawable.okokokok, "Da Nang", "5,6 km"))
-        list.add(Restaurant(5, "Home", R.drawable.okokokok, "Da Nang", "5,6 km"))
-        return list
+    override fun onItemClick(view: View, position: Int) {
+        TODO("Not yet implemented")
     }
+
+    override fun onRestaurantsLoaded(restaurants: ArrayList<Restaurant>) {
+        val detailRestaurantRecyclerView =
+            view?.findViewById<RecyclerView>(R.id.detail_restaurant_recycler_view)
+        if (detailRestaurantRecyclerView != null) {
+            detailRestaurantRecyclerView.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        }
+        if (detailRestaurantRecyclerView != null) {
+            detailRestaurantRecyclerView.adapter = RestaurantAdapter(restaurants, object :
+                OnItemClickListener {
+                override fun onItemClick(view: View, position: Int) {
+                    Toast.makeText(context, restaurants[position].name, Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+
 }

@@ -7,14 +7,18 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orderfood_app.R
+import com.example.orderfood_app.models.Category
 
 interface OnItemClickListener {
     fun onItemClick(view: View, position: Int)
 }
 
-data class Category(val id: Int, val name: String, val image: Int)
-class CategoryAdapter(private val categories: ArrayList<Category>, private val listener: OnItemClickListener) :
+class CategoryAdapter(
+    private val categories: ArrayList<Category>,
+    private val listener: OnItemClickListener
+) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         val view =
@@ -26,7 +30,8 @@ class CategoryAdapter(private val categories: ArrayList<Category>, private val l
 
         val category = categories[position]
         holder.categoryName.text = category.name
-        holder.categoryImage.setImageResource(category.image)
+        // using coli load imgage
+        holder.categoryImage.load(category.image)
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position)
         }
@@ -39,7 +44,6 @@ class CategoryAdapter(private val categories: ArrayList<Category>, private val l
     class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryImage: ImageView = itemView.findViewById<ImageView>(R.id.image_category)
         val categoryName: TextView = itemView.findViewById<TextView>(R.id.name_category)
-
 
     }
 
