@@ -24,6 +24,16 @@ class ProductAdapter(
         return ProductViewHolder(view)
     }
 
+    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val productImage: ImageView = itemView.findViewById<ImageView>(R.id.product_image)
+        val productName: TextView = itemView.findViewById<TextView>(R.id.product_name)
+        val productLocation: TextView = itemView.findViewById<TextView>(R.id.location_product_lable)
+        val productCategory: TextView = itemView.findViewById<TextView>(R.id.category_product)
+        val productPrice: TextView = itemView.findViewById<TextView>(R.id.price)
+        val productRating: RatingBar = itemView.findViewById<RatingBar>(R.id.product_ratingBar)
+
+
+    }
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
 
         val product = products[position]
@@ -41,15 +51,6 @@ class ProductAdapter(
     override fun getItemCount(): Int = products.size
 
 
-    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val productImage: ImageView = itemView.findViewById<ImageView>(R.id.product_image)
-        val productName: TextView = itemView.findViewById<TextView>(R.id.product_name)
-        val productLocation: TextView = itemView.findViewById<TextView>(R.id.location_product_lable)
-        val productCategory: TextView = itemView.findViewById<TextView>(R.id.category_product)
-        val productPrice: TextView = itemView.findViewById<TextView>(R.id.price)
-        val productRating: RatingBar = itemView.findViewById<RatingBar>(R.id.product_ratingBar)
 
-
-    }
 
 }

@@ -18,6 +18,8 @@ import com.example.orderfood_app.models.Notification
 import com.example.orderfood_app.services.CartCallback
 import com.example.orderfood_app.services.CartService
 import com.google.firebase.database.*
+import java.text.DecimalFormat
+import java.text.NumberFormat
 
 class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
 
@@ -35,7 +37,6 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
     private var firebaseDatabase: FirebaseDatabase? = null
     private lateinit var databaseReference: DatabaseReference
     private var selectedCart: Cart? = null
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,23 +61,24 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
         cartAdapter?.setOnClickView {
             selectedId = it.id
             selectedCart = it
-
         }
+        getData()
         val btn_checkout = findViewById<Button>(R.id.checkout_btn)
         btn_checkout.setOnClickListener {
-            getData()
             if (carts.isNotEmpty()) {
+                getTotalPrice()
+                Log.e("total", getTotalPrice())
                 // Thực hiện xử lý thanh toán và kiểm tra các giỏ hàng đã được chọn
                 // Tạo Intent hoặc gọi hàm để chuyển đến màn hình thanh toán hoặc xử lý giao dịch
                 // Ví dụ:
                 val intent = Intent(this, CheckoutActivity::class.java)
-                intent.putExtra("carts", carts) // Truyền danh sách giỏ hàng cho màn hình thanh toán
+                intent.putExtra("total", getTotalPrice())
+                intent.putExtra("quantity", getTotalQuantity())// Truyền danh sách giỏ hàng cho màn hình thanh toán
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Không có mục nào trong giỏ hàng", Toast.LENGTH_SHORT).show()
             }
         }
-        getData()
     }
 
     private fun delete() {
@@ -85,6 +87,7 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
         reloadActivity()
 //        getData()
     }
+
     fun reloadActivity() {
         recreate()
     }
@@ -210,72 +213,48 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
             e.printStackTrace()
         }
     }
+    private fun formatPriceWithCurrency(price: Int): String {
+        val numberFormat: NumberFormat = DecimalFormat("#,###")
+        val formattedPrice = numberFormat.format(price)
+        return "$formattedPrice VND"
+    }
+    private fun getTotalPrice(): String {
+       var total = 0
+        for (cart in carts) {
+            val priceString = cart.price.replace("[^\\d]".toRegex(), "") // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
+            Log.e("TAG", "getPriceString: $priceString")
+            val price = priceString.toIntOrNull() // Ép kiểu chuỗi thành số nguyên
+            if (price != null) {
+                total += price * cart.quantity.toIntOrNull()!! ?: 0
+            }
+            Log.e("TAG", "getTotal: $total")
+            Log.e("TAG", "getTotalPrice: $price")
+            Log.e("TAG", "getQuantity: ${cart.quantity}")
 
 
-//    override fun onCartsLoaded(carts: ArrayList<Cart>) {
-//        val cart = Cart(
-//            "",
-//            "Cá viên chiên",
-//            "",
-//            "20.000 VND",
-//            "2",
-//            "https://cdn.tgdd.vn/Files/2021/02/02/1324928/5-quan-ca-vien-chien-tai-sai-gon-ma-tin-do-an-vat-nao-cung-biet-202201110147493182.jpg",
-//            "",
-//        )
-//        Toast.makeText(this, cart.name, Toast.LENGTH_SHORT).show()
-//        Toast.makeText(this, cartService.create(cart).message, Toast.LENGTH_SHORT).show()
-//        val cartRecyclerView = findViewById<RecyclerView>(R.id.cart_recycler_view)
-//        if (cartRecyclerView != null) {
-//            cartRecyclerView.layoutManager =
-//                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-//        }
-//        Log.e("TAG", "onCreate: ${carts}")
-////        cartsRestaurant =
-////            carts.filter { it.loacation.startsWith(location) } as ArrayList<Product>
-////        Log.e("TAG", "onCreate: ${productsRestaurant}")
-//        if (cartRecyclerView != null) {
-//            cartRecyclerView.adapter =
-//                CartAdapter(carts, object : OnItemClickListenerCart {
-//                    override fun onItemClick(view: View, position: Int) {
-//                        Toast.makeText(
-//                            this@CartActivity,
-//                            carts[position].name,
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-////                        val intent = Intent(this@ProductActivity, DetailActivity::class.java)
-////                        intent.putExtra("cart", carts[position])
-////                        startActivity(intent)
-//                    }
-//
-//                    override fun onIncreaseClick(view: View, position: Int) {
-//                        // Xử lý sự kiện tăng số lượng mục tại vị trí `position` trong giỏ hàng
-//                        val cartItem = carts[position]
-//                        count = cartItem.quantity.toInt()
-//                        count++
-//                        cartItem.quantity = count.toString()
-//                    }
-//
-//                    override fun onDecreaseClick(view: View, position: Int) {
-//                        // Xử lý sự kiện giảm số lượng mục tại vị trí `position` trong giỏ hàng
-//                        val cartItem = carts[position]
-//                        count = cartItem.quantity.toInt()
-//
-//                        if (count > 0) {
-//                            count--
-//                            cartItem.quantity = count.toString()
-//                        }
-//                    }
-//
-//                    override fun onDeleteClick(view: View, position: Int) {
-//                        // Xử lý sự kiện xóa mục tại vị trí `position` khỏi giỏ hàng
-//                        Log.e("TAG", "onDeleteClick: ${carts[position].id}")
-//                        cartService.delete(carts[position].id)
-//                    }
-//                })
-//        }
-//    }
-//
-//    override fun onCartLoaded(cart: Cart?) {
-//        TODO("Not yet implemented")
-//    }
+        }
+        val totalValue = formatPriceWithCurrency(total)
+        return totalValue
+        Log.e("TAG", "getTotalPrice: $totalValue")
+    }
+
+    private fun getTotalQuantity(): String {
+        var total = 0
+        for (cart in carts) {
+            val priceString = cart.price.replace("[^\\d]".toRegex(), "") // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
+            Log.e("TAG", "getPriceString: $priceString")
+            val price = priceString.toIntOrNull() // Ép kiểu chuỗi thành số nguyên
+            if (price != null) {
+                total += cart.quantity.toIntOrNull()!! ?: 0
+            }
+            Log.e("TAG", "getTotal: $total")
+            Log.e("TAG", "getTotalPrice: $price")
+            Log.e("TAG", "getQuantity: ${cart.quantity}")
+
+
+        }
+        val totalValue = formatPriceWithCurrency(total)
+        return totalValue
+        Log.e("TAG", "getTotalPrice: $totalValue")
+    }
 }

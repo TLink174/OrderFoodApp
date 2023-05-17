@@ -111,12 +111,19 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/order_resturant_name"
+        android:id="@+id/order_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_marginTop="10dp"
         android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/order_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="TextView" />
 
     <LinearLayout
         android:layout_width="match_parent"

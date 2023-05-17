@@ -157,11 +157,11 @@
         android:layout_below="@+id/checkout_frame">
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/order_checkout"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/rectangle_91_shape"
-            android:text="Button" />
+            android:text="order" />
     </FrameLayout>
 </RelativeLayout>

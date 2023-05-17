@@ -56,7 +56,6 @@ class CartAdapter(
             onClickView?.invoke(cart)
             listener?.onDeleteClick()
             notifyDataSetChanged()
-
         }
         holder.increaseButton.setOnClickListener {
             onClickView?.invoke(cart)
@@ -76,10 +75,6 @@ class CartAdapter(
             listener?.onClickDecrease()
             notifyDataSetChanged()
         }
-//        holder.delete.setOnClickListener {
-//            listener.onDeleteClick(it, position)
-//        }
-
     }
 
     fun setItems(carts: ArrayList<Cart>) {
@@ -113,38 +108,10 @@ class CartAdapter(
         val cartPrice: TextView = itemView.findViewById<TextView>(R.id.cart_price)
         val cartQuantity: TextView = itemView.findViewById<TextView>(R.id.quantityEditText)
         fun setItem(cart: Cart) {
-
-
             cartName.text = cart.name
             cartImage.load(cart.image)
             cartPrice.text = cart.price
             cartQuantity.text = cart.quantity
-
-//            increaseButton.setOnClickListener {
-//                onClickView?.invoke(cart)
-//                var count: Int = cart.quantity.toInt()
-//                count++
-//                cart.quantity = count.toString()
-//                cartQuanlity.text = cart.quantity
-//            }
-//            decreaseButton.setOnClickListener {
-//                onClickView?.invoke(cart)
-//                var count: Int = cart.quantity.toInt()
-//
-//                if (count > 1) {
-//                    count--
-//                    cart.quantity = count.toString()
-//                    cartQuanlity.text = cart.quantity
-//
-//                }
-//            }
-//            delete.setOnClickListener {
-//                onClickView?.invoke(cart)
-//            }
-//            delete.setOnClickListener {
-//                onClickView?.invoke(cart)
-//                listener?.onDeleteClick()
-//            }
         }
 
         fun setOnClickView(callback: (Cart) -> Unit) {
