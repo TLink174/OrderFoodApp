@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.orderfood_app.R
+import com.example.orderfood_app.models.Product
 
 
-data class ProductSearch(val id: Int, val name: String, val image: Int, val loacation: String, val price: String)
 class ProductSearchAdapter(
-    private val productSearchs: ArrayList<ProductSearch>,
+    private val productSearchs: ArrayList<Product>,
     private val listener: OnItemClickListener
 ) :
     RecyclerView.Adapter<ProductSearchAdapter.ProductSearchViewHolder>() {
@@ -25,7 +26,7 @@ class ProductSearchAdapter(
     override fun onBindViewHolder(holder: ProductSearchViewHolder, position: Int) {
 
         val productSearch = productSearchs[position]
-        holder.productSearchImage.setImageResource(productSearch.image)
+        holder.productSearchImage.load(productSearch.image)
         holder.productSearchName.text = productSearch.name
         holder.productSearchLocation.text = productSearch.loacation
         holder.productSearchPrice.text = productSearch.price
@@ -36,6 +37,12 @@ class ProductSearchAdapter(
     }
 
     override fun getItemCount(): Int = productSearchs.size
+
+    fun setData(productSearchs: ArrayList<Product>) {
+        this.productSearchs.clear()
+        this.productSearchs.addAll(productSearchs)
+        notifyDataSetChanged()
+    }
 
 
     class ProductSearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -100,7 +100,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_weight="9"
-                        android:text="TextView" />
+                        android:text="Restaurant" />
 
                     <TextView
                         android:id="@+id/restaurant_show"
@@ -145,7 +145,7 @@
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_weight="9"
-                        android:text="TextView" />
+                        android:text="Best for the best" />
 
                     <TextView
                         android:id="@+id/product_show"

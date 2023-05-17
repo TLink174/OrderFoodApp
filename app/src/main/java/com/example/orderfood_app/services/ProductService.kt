@@ -8,6 +8,8 @@ import com.google.firebase.database.*
 interface ProductCallback {
     fun onProductsLoaded(products: ArrayList<Product>)
 
+    fun onProductLoaded(product: Product)
+
 }
 
 class ProductService (val callback: ProductCallback) : DAOInterface<Product> {
@@ -34,6 +36,7 @@ class ProductService (val callback: ProductCallback) : DAOInterface<Product> {
             databaseReference.child(id).addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     product = snapshot.getValue(Product::class.java)!!
+                    callback.onProductLoaded(product)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -91,6 +94,7 @@ class ProductService (val callback: ProductCallback) : DAOInterface<Product> {
                                 list.add(data.getValue(Product::class.java)!!)
                             }
                         }
+                        callback.onProductsLoaded(list)
                     }
 
                     override fun onCancelled(error: DatabaseError) {

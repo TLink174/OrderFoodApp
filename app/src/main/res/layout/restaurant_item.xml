@@ -63,12 +63,12 @@
 
             <RatingBar
                 android:id="@+id/restaurant_ratingBar"
-                android:rating="2.5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:progressTint="@color/_bg__home_color"
                 android:progressBackgroundTint="@color/enter_your_location_color"
-                />
+                android:progressTint="@color/_bg__home_color"
+                android:rating="2.5"
+                android:secondaryProgressTint="@color/_bg__home_color" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

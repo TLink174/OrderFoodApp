@@ -9,6 +9,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orderfood_app.R
 
+interface OnItemClickListenerOrder {
+    //dùng hàm để cài đặt sự kiện cho nút trong item ở Activity
+    fun onDeleteClick()
+    fun onUpdateClick()
+}
 
 data class Order(val id: Int, val status: String, val loacation: String, val price: String, val quantity: String, val date: String)
 class OrderAdapter(

@@ -30,13 +30,12 @@ class ProductAdapter(
         holder.productImage.load(product.image)
         holder.productName.text = product.name
         holder.productLocation.text = product.loacation
-        holder.productDescription.text = product.description
+        holder.productCategory.text = product.category
         holder.productPrice.text = product.price
         holder.productRating.rating = product.rating
         holder.itemView.setOnClickListener {
             listener.onItemClick(it, position)
         }
-
     }
 
     override fun getItemCount(): Int = products.size
@@ -46,7 +45,7 @@ class ProductAdapter(
         val productImage: ImageView = itemView.findViewById<ImageView>(R.id.product_image)
         val productName: TextView = itemView.findViewById<TextView>(R.id.product_name)
         val productLocation: TextView = itemView.findViewById<TextView>(R.id.location_product_lable)
-        val productDescription: TextView = itemView.findViewById<TextView>(R.id.category_product)
+        val productCategory: TextView = itemView.findViewById<TextView>(R.id.category_product)
         val productPrice: TextView = itemView.findViewById<TextView>(R.id.price)
         val productRating: RatingBar = itemView.findViewById<RatingBar>(R.id.product_ratingBar)
 

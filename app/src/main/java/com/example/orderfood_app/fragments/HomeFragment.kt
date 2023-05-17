@@ -1,6 +1,7 @@
 package com.example.orderfood_app.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,7 +12,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.orderfood_app.DetailActivity
+import com.example.orderfood_app.ProductActivity
 import com.example.orderfood_app.R
+import com.example.orderfood_app.RestaurantActivity
 import com.example.orderfood_app.adapters.*
 import com.example.orderfood_app.models.*
 import com.example.orderfood_app.services.*
@@ -30,6 +34,7 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
     lateinit var brandService: BrandService
     lateinit var restaurantService: RestaurantService
     lateinit var productService: ProductService
+    public var idProduct : String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -74,18 +79,26 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
 //            Toast.makeText(context, categories[i].name, Toast.LENGTH_SHORT).show()
 //        }
 
-        val seeAll = view.findViewById<View>(R.id.restaurant_show)
-        seeAll.setOnClickListener {
-            Toast.makeText(context, "See All", Toast.LENGTH_SHORT).show()
+        val seeAllRestaurant = view.findViewById<View>(R.id.restaurant_show)
+        seeAllRestaurant.setOnClickListener {
+            val intent = Intent(activity, RestaurantActivity::class.java)
+            startActivity(intent)
         }
-        val seeAllIcon = view.findViewById<ImageView>(R.id.restaurant_show_icon)
-        seeAllIcon.setOnClickListener {
-            val fragment = RetaurantFragment() // thay MyNewFragment bằng Fragment mới của bạn
-            val fragmentManager = requireActivity().supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_home, fragment) // thay R.id.fragment_container bằng ID của Container Fragment trong Activity của bạn
-            transaction.addToBackStack(null)
-            transaction.commit()
+        val seeAllRestaurantIcon = view.findViewById<ImageView>(R.id.restaurant_show_icon)
+        seeAllRestaurantIcon.setOnClickListener {
+            val intent = Intent(activity, RestaurantActivity::class.java)
+            startActivity(intent)
+        }
+
+        val seeAllProduct = view.findViewById<View>(R.id.product_show)
+        seeAllProduct.setOnClickListener {
+            val intent = Intent(activity, ProductActivity::class.java)
+            startActivity(intent)
+        }
+        val seeAllProductIcon = view.findViewById<ImageView>(R.id.product_show_icon)
+        seeAllProductIcon.setOnClickListener {
+            val intent = Intent(activity, ProductActivity::class.java)
+            startActivity(intent)
         }
         return view
 
@@ -235,6 +248,9 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
                     override fun onItemClick(view: View, position: Int) {
                         Toast.makeText(context, restaurants[position].name, Toast.LENGTH_SHORT)
                             .show()
+                        val intentRestaurant = Intent(context, ProductActivity::class.java)
+                        intentRestaurant.putExtra("name", restaurants[position].name)
+                        startActivity(intentRestaurant)
                     }
                 })
         }
@@ -243,12 +259,12 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
     override fun onProductsLoaded(products: ArrayList<Product>) {
 //        val product = Product(
 //            "",
-//            "Cơm tấm ",
-//            "https://hotel84.com/hotel84-images/news/photo/combo-suon-cot-let-comtam-s.jpg",
-//            "Cơm",
-//            "30.000 VND",
-//            "Đà Nẵng",
-//            5f
+//            "Cá viên chiên",
+//            "https://cdn.tgdd.vn/Files/2021/02/02/1324928/5-quan-ca-vien-chien-tai-sai-gon-ma-tin-do-an-vat-nao-cung-biet-202201110147493182.jpg",
+//            "Ăn vặt",
+//            "20.000 VND",
+//            "Sà Bì Chưởng",
+//            4f
 //        )
 //        Toast.makeText(context, product.name, Toast.LENGTH_SHORT).show()
 //        Toast.makeText(context, productService.create(product).message, Toast.LENGTH_SHORT).show()
@@ -261,9 +277,16 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
             productRecyclerView.adapter = ProductAdapter(products, object : OnItemClickListener {
                 override fun onItemClick(view: View, position: Int) {
                     Toast.makeText(context, products[position].name, Toast.LENGTH_SHORT).show()
+                    val intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("product", products[position])
+                    startActivity(intent)
                 }
             })
         }
+    }
+
+    override fun onProductLoaded(product: Product) {
+        TODO("Not yet implemented")
     }
 
 }

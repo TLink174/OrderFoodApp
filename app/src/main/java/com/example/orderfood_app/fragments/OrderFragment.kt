@@ -1,6 +1,7 @@
 package com.example.orderfood_app.fragments
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.orderfood_app.CartActivity
+import com.example.orderfood_app.ProductActivity
 import com.example.orderfood_app.R
 import com.example.orderfood_app.adapters.OnItemClickListener
 import com.example.orderfood_app.adapters.Order
@@ -38,7 +41,6 @@ class OrderFragment : Fragment() {
         val orderRecyclerView = view.findViewById<RecyclerView>(R.id.order_recycler_view)
         val emptyOrderLayout = view.findViewById<LinearLayout>(R.id.order_empty_layout)
         val orderBtn = view.findViewById<Button>(R.id.order_btn)
-        val removeOrderBtn = view.findViewById<Button>(R.id.remove_all)
         val completeIcon = view.findViewById<ImageView>(R.id.complete_icon)
         val completeText = view.findViewById<TextView>(R.id.complete_text)
         val canceledIcon = view.findViewById<ImageView>(R.id.canceled_icon)
@@ -47,6 +49,12 @@ class OrderFragment : Fragment() {
         val processingText = view.findViewById<TextView>(R.id.processing_text)
         val deliveryIcon = view.findViewById<ImageView>(R.id.delivery_icon)
         val deliveryText = view.findViewById<TextView>(R.id.delivery_text)
+
+        val btn_cart = view?.findViewById<ImageView>(R.id.cart_icon)
+        btn_cart?.setOnClickListener {
+            val intent = Intent(activity, CartActivity::class.java)
+            startActivity(intent)
+        }
 
         emptyOrderLayout.visibility = View.GONE
         orderRecyclerView.layoutManager =
@@ -73,14 +81,10 @@ class OrderFragment : Fragment() {
         })
         orderRecyclerView.adapter = adapterOrder
         orderBtn.setOnClickListener {
-            val order: Order = Order(1, "Đã giao", "Bánh mì ngon", "15.000 VND", "1 cái", "17/14/2023")
-            addOrder(order)
-        }
-        removeOrderBtn.setOnClickListener {
-            removeAllOrder()
+            val intent = Intent(activity, ProductActivity::class.java)
+            startActivity(intent)
         }
         return view
-
 
     }
 

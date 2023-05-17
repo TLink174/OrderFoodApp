@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.orderfood_app.R
+import com.example.orderfood_app.models.Category
 
 
-data class Suggest(val id: Int, val name: String)
 class SuggestAdapter(
-    private val suggests: ArrayList<Suggest>,
+    private val suggests: ArrayList<Category>,
     private val listener: OnItemClickListener
 ) :
     RecyclerView.Adapter<SuggestAdapter.SuggestViewHolder>() {
