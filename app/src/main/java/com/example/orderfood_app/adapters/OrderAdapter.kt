@@ -18,9 +18,7 @@ interface OnItemClickListenerOrder {
     fun onUpdateClick()
 }
 
-class OrderAdapter(
-
-) : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
+class OrderAdapter() : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     private val orders = ArrayList<Order>()
     private var listener: OnItemClickListenerOrder? = null

@@ -34,7 +34,7 @@ class BrandAdapter(
 
     }
 
-    override fun getItemCount(): Int = brands.size
+    override fun getItemCount(): Int = brands.size //tổng số mục đc hiển thị trong ds
 
 
     class BrandViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

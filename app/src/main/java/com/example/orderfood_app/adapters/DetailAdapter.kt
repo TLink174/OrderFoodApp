@@ -22,7 +22,7 @@ class DetailAdapter (
         return DetailViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: DetailAdapter.DetailViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DetailAdapter.DetailViewHolder, position: Int) { //hàm xử ký ráp sự kiện cho item
         val product = product[position]
         holder.productImage.load(product.image)
         holder.productName.text = product.name
@@ -36,7 +36,7 @@ class DetailAdapter (
 
     override fun getItemCount(): Int = product.size
 
-    class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class DetailViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) { //gọi giá trị từng id trong 1 item
         val productImage: ImageView = itemView.findViewById<ImageView>(R.id.detail_image)
         val productName: TextView = itemView.findViewById<TextView>(R.id.detail_name)
         val productDescription: TextView = itemView.findViewById<TextView>(R.id.detail_description)
