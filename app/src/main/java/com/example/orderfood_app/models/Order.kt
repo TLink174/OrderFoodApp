@@ -9,5 +9,6 @@ class Order(
     val email: String = "",
     val price: String = "",
     val quantity: String = "",
-    val date: String = ""
+    val date: String = "",
+    val idUser : String = ""
 )

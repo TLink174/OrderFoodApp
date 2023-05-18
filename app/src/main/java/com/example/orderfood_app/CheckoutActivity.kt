@@ -1,9 +1,12 @@
 package com.example.orderfood_app
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -32,35 +35,53 @@ class CheckoutActivity : AppCompatActivity() {
         initRecyclerView()
         val totalValue  = intent.getStringExtra("total")
         val totalQuantity = intent.getStringExtra("quantity")
+        val idUser = intent.getStringExtra("idUser")
+        val getEmail = intent.getStringExtra("email")
+        val getName = intent.getStringExtra("name")
         val total_price = findViewById<TextView>(R.id.total_price)
-        total_price.text = totalValue
+
         val order_checkout = findViewById<Button>(R.id.order_checkout)
-        val editName = findViewById<TextView>(R.id.editName)
-        val editAddress = findViewById<TextView>(R.id.editAddress)
-        val editPhone = findViewById<TextView>(R.id.editTextPhone)
-        val editEmail = findViewById<TextView>(R.id.editEmail)
+        val editName = findViewById<EditText>(R.id.editName)
+        val editAddress = findViewById<EditText>(R.id.editAddress)
+        val editPhone = findViewById<EditText>(R.id.editTextPhone)
+        val editEmail = findViewById<EditText>(R.id.editEmail)
+
+
+
+
         val date : String = getCurrentDate()
+        total_price.text = totalValue
+
+        val name = editName.text
+        val address = editAddress.text
+        val phone = editPhone.text
+        val email = editEmail.text
         order_checkout.setOnClickListener {
-            var order = Order(
-                "",
-                "Đã nhận",
-                "${editAddress.text}",
-                "${editName.text}",
-                "${editPhone.text}",
-                "${editEmail.text}",
-                "${totalValue}",
-                "${totalQuantity}",
-                "${date}"
-            )
-            create(order)
-            val fragmentManager = supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
+            Log.d("checkout", "name: $name, address: $address, phone: $phone, email: $email")
+            if (name.isEmpty() || address.isEmpty() || phone.isEmpty() || email.isEmpty()) {
+                Toast.makeText(this, "Vui lòng điền đầy đủ thông tin!", Toast.LENGTH_SHORT).show()
+            } else if(!isPhoneNumberValid(phone.toString())){
+                Toast.makeText(this, "Số điện thoại không hợp lệ!", Toast.LENGTH_SHORT).show()
+            } else {
+                var order = Order(
+                    "",
+                    "Đã nhận",
+                    "${editAddress.text}",
+                    "${editName.text}",
+                    "${editPhone.text}",
+                    "${editEmail.text}",
+                    "${totalValue}",
+                    "${totalQuantity}",
+                    "${date}",
+                    "${idUser}"
+                )
+                create(order)
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
 
-            fragmentTransaction.replace(R.id.fragment_home, OrderFragment())
-            fragmentTransaction.addToBackStack(null)
-            fragmentTransaction.commit()
+                Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
+            }
 
-            Toast.makeText(this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show()
         }
 
         val btn_back = findViewById<ImageView>(R.id.back_checkout)
@@ -92,6 +113,34 @@ class CheckoutActivity : AppCompatActivity() {
             e.printStackTrace()
             Notification("Failed", item, false)
         }
+    }
+
+    fun formatPhoneNumber(phoneNumber: String): String {
+        val formattedPhoneNumber = StringBuilder()
+
+        // Remove all non-digit characters from the phone number
+        val digitsOnly = phoneNumber.replace("\\D+".toRegex(), "")
+
+        // Apply formatting based on the number of digits
+        if (digitsOnly.length >= 10) {
+            // Format as: (XXX) XXX-XXXX
+            formattedPhoneNumber.append("(")
+                .append(digitsOnly.substring(0, 3))
+                .append(") ")
+                .append(digitsOnly.substring(3, 6))
+                .append("-")
+                .append(digitsOnly.substring(6, 10))
+        } else {
+            // Return the original input if it doesn't have enough digits for formatting
+            return phoneNumber
+        }
+
+        return formattedPhoneNumber.toString()
+    }
+
+    fun isPhoneNumberValid(phoneNumber: String): Boolean {
+        val phonePattern = "^(\\+?84|0)(3[2-9]|5[2689]|7[06789]|8[1-689]|9[0-9])[0-9]{7}\$".toRegex()
+        return phonePattern.matches(phoneNumber)
     }
 
     private fun getCurrentDate(): String {

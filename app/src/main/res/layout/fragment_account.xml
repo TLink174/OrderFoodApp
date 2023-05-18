@@ -29,6 +29,7 @@
                 android:layout_width="105dp"
                 android:layout_height="105dp"
                 android:layout_gravity="center"
+                android:onClick="pickedPhoto"
                 android:src="@drawable/okokokok" />
 
             <TextView
@@ -36,13 +37,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="TextView"
                 android:textSize="20dp"
+                android:textColor="@android:color/black"
                 android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/account_location"
+                android:id="@+id/account_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -71,7 +74,7 @@
                     android:src="@drawable/baseline_person_24" />
 
                 <EditText
-                    android:id="@+id/account_name_1"
+                    android:id="@+id/edit_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -130,13 +133,15 @@
                     android:layout_weight="9"
                     android:ems="10"
                     android:inputType="textEmailAddress"
-                    android:text="tiencute@gmail.com" />
+                    android:text="tiencute@gmail.com"
+                    android:focusable="false"
+                    android:longClickable="false" />
             </LinearLayout>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/edit_btn"
             android:layout_width="220dp"
             android:layout_height="45dp"
             android:layout_gravity="center"
@@ -152,21 +157,12 @@
             android:layout_marginTop="100dp"
             >
 
-            <Switch
-                android:id="@+id/dark_theme"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dark Theme"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                android:layout_marginBottom="15dp"/>
-
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/logOut_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="log out"
-                android:background="@drawable/rectangle_91_shape"/>
+                android:background="@drawable/rectangle_91_shape"
+                android:text="log out" />
         </LinearLayout>
 
     </LinearLayout>

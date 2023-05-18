@@ -5,7 +5,7 @@
     android:id="@+id/fragment_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RegisterFragment">
+    tools:context=".RegisterActivity">
 
     <ImageView
         android:id="@+id/sign_in_ek1"
@@ -25,6 +25,8 @@
         android:layout_height="wrap_content"
         android:hint="Enter your email"
         android:textSize="14sp"
+        android:inputType="textEmailAddress"
+        android:selectAllOnFocus="true"
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -78,12 +80,12 @@
         android:textColor="@color/enter_your_location_color"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sign_in"
+        app:layout_constraintEnd_toStartOf="@+id/sign_in_btn"
         app:layout_constraintHorizontal_bias="0.898"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <CheckedTextView
-        android:id="@+id/sign_in"
+    <TextView
+        android:id="@+id/sign_in_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="80dp"

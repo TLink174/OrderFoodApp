@@ -11,24 +11,30 @@ import com.example.orderfood_app.fragments.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity : AppCompatActivity(), OnThemeChangeListener {
+    val homeFragment = HomeFragment()
+    val searchFragment = SearchFragment()
+    val orderFragment = OrderFragment()
+    val accountFragment = AccountFragment()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val frameContainer = findViewById<FrameLayout>(R.id.frame_container)
-        setFragment(HomeFragment())
+        setFragment(homeFragment)
         bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
-                R.id.home -> setFragment(HomeFragment())
-                R.id.search -> setFragment(SearchFragment())
-                R.id.order -> setFragment(OrderFragment())
-                R.id.account -> setFragment(AccountFragment())
+                R.id.home -> setFragment(homeFragment)
+                R.id.search -> setFragment(searchFragment)
+                R.id.order -> setFragment(orderFragment)
+                R.id.account -> setFragment(accountFragment)
             }
             true
         }
 
+    }
 
+    private fun replaceFragment(fragment: Fragment) {
 
     }
 
