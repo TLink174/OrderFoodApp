@@ -15,15 +15,21 @@ import com.example.orderfood_app.adapters.CartAdapter
 import com.example.orderfood_app.adapters.OnItemClickListenerCart
 import com.example.orderfood_app.models.Cart
 import com.example.orderfood_app.models.Notification
+import com.example.orderfood_app.models.User
 import com.example.orderfood_app.services.CartCallback
 import com.example.orderfood_app.services.CartService
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import java.text.DecimalFormat
 import java.text.NumberFormat
 
 class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
 
     private var cartAdapter: CartAdapter? = null
+    private lateinit var auth: FirebaseAuth
+
 
     //    lateinit var cartService: CartService
     var count: Int = 0
@@ -36,16 +42,19 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
     private var selectedLocation: String? = null
     private var firebaseDatabase: FirebaseDatabase? = null
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var databaseReferenceUser: DatabaseReference
+
     private var selectedCart: Cart? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
-
 //        cartService = CartService(this)
 //        cartService.getAll()
         initRecyclerView()
+        val idUser = intent.getStringExtra("uid")
+
         databaseReference = FirebaseDatabase.getInstance().getReference("cart")
         val btn_back = findViewById<ImageView>(R.id.back)
         btn_back.setOnClickListener {
@@ -73,7 +82,35 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
                 // Ví dụ:
                 val intent = Intent(this, CheckoutActivity::class.java)
                 intent.putExtra("total", getTotalPrice())
-                intent.putExtra("quantity", getTotalQuantity())// Truyền danh sách giỏ hàng cho màn hình thanh toán
+                intent.putExtra(
+                    "quantity",
+                    getTotalQuantity()
+                )// Truyền danh sách giỏ hàng cho màn hình thanh toán
+                intent.putExtra("idUser", carts.get(0).idUser)
+                databaseReferenceUser = FirebaseDatabase.getInstance().getReference("user")
+                databaseReferenceUser.child(carts.get(0).idUser)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val user = snapshot.getValue(User::class.java)
+                            if (user != null) {
+                                // Thực hiện xử lý với thông tin người dùng tại đây
+                                Log.d("AccountFragment", "User name: ${user.name}")
+                                Log.d("AccountFragment", "User email: ${user.email}")
+                                intent.putExtra("name", user.name)
+                                intent.putExtra("email", user.email)
+
+                                // ...
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            Log.e(
+                                "AccountFragment",
+                                "Error retrieving user data",
+                                error.toException()
+                            )
+                        }
+                    })
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "Không có mục nào trong giỏ hàng", Toast.LENGTH_SHORT).show()
@@ -113,12 +150,21 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
     }
 
     private fun getData() {
+        auth = Firebase.auth
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (data in snapshot.children) {
                     var cart = data.getValue(Cart::class.java)!!
                     carts.add(cart)
+                }
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    val uid = currentUser.uid
+
+                    carts = carts.filter { cart ->
+                        cart.quantity > "0" && cart.idUser == uid
+                    } as ArrayList<Cart>
                 }
                 cartAdapter?.setItems(carts)
                 Log.e("TAG", "onDataChange: ${carts.size}")
@@ -213,15 +259,20 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
             e.printStackTrace()
         }
     }
+
     private fun formatPriceWithCurrency(price: Int): String {
         val numberFormat: NumberFormat = DecimalFormat("#,###")
         val formattedPrice = numberFormat.format(price)
         return "$formattedPrice VND"
     }
+
     private fun getTotalPrice(): String {
-       var total = 0
+        var total = 0
         for (cart in carts) {
-            val priceString = cart.price.replace("[^\\d]".toRegex(), "") // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
+            val priceString = cart.price.replace(
+                "[^\\d]".toRegex(),
+                ""
+            ) // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
             Log.e("TAG", "getPriceString: $priceString")
             val price = priceString.toIntOrNull() // Ép kiểu chuỗi thành số nguyên
             if (price != null) {
@@ -241,7 +292,10 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
     private fun getTotalQuantity(): String {
         var total = 0
         for (cart in carts) {
-            val priceString = cart.price.replace("[^\\d]".toRegex(), "") // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
+            val priceString = cart.price.replace(
+                "[^\\d]".toRegex(),
+                ""
+            ) // Loại bỏ ký tự đơn vị (chỉ giữ lại chữ số và dấu chấm)
             Log.e("TAG", "getPriceString: $priceString")
             val price = priceString.toIntOrNull() // Ép kiểu chuỗi thành số nguyên
             if (price != null) {
@@ -253,8 +307,6 @@ class CartActivity : AppCompatActivity(), OnItemClickListenerCart {
 
 
         }
-        val totalValue = formatPriceWithCurrency(total)
-        return totalValue
-        Log.e("TAG", "getTotalPrice: $totalValue")
+        return total.toString()
     }
 }

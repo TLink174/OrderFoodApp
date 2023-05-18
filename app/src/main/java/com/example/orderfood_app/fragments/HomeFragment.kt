@@ -34,7 +34,7 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
     lateinit var brandService: BrandService
     lateinit var restaurantService: RestaurantService
     lateinit var productService: ProductService
-    public var idProduct : String = ""
+    public var idProduct: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -228,10 +228,11 @@ class HomeFragment : Fragment(), CategoryCallback, SlideCallback, BrandCallback,
 
 //        val restaurant = Restaurant(
 //            "",
-//            "Sà Bì Chưởng",
-//            "https://icolor.vn/wp-content/uploads/2021/06/sa-bi-chuong.jpg",
-//            "Da Nang",
-//            "5,6 km"
+//            "Ẩm thực Gánh",
+//            "https://pos.nvncdn.net/be3159-662/pc/20230419_vsJf7ty8.png",
+//            "Ăn vặt",
+//            "Đà Nẵng",
+//            "10 km",
 //            4.5f
 //        )
 //        Toast.makeText(context, restaurant.name, Toast.LENGTH_SHORT).show()

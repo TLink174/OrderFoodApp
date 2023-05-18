@@ -11,7 +11,10 @@ import com.example.orderfood_app.models.Cart
 import com.example.orderfood_app.models.Notification
 import com.example.orderfood_app.models.Product
 import com.example.orderfood_app.services.ProductCallback
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 
 class DetailActivity : AppCompatActivity(), ProductCallback {
 
@@ -20,11 +23,13 @@ class DetailActivity : AppCompatActivity(), ProductCallback {
     var id: String = ""
 
     private var cartAdapter: CartAdapter? = null
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+        auth = Firebase.auth
 
 
         val detailBack = findViewById<ImageView>(R.id.detail_back)
@@ -61,20 +66,26 @@ class DetailActivity : AppCompatActivity(), ProductCallback {
 //                }
 //            })
             detailAdd.setOnClickListener {
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    val uid = currentUser.uid
+                    val email = currentUser.email
 
-                val cart = Cart(
-                    "",
-                    product.name,
-                    product.loacation,
-                    product.price,
-                    "1",
-                    product.image,
-                    "",
-                )
-                create(cart)
-                val intent = Intent(this, CartActivity::class.java)
-                startActivity(intent)
-                cartAdapter?.notifyDataSetChanged()
+                    val cart = Cart(
+                        "",
+                        product.name,
+                        product.loacation,
+                        product.price,
+                        "1",
+                        product.image,
+                        uid,
+                    )
+                    create(cart)
+                    val intent = Intent(this, CartActivity::class.java)
+                    intent.putExtra("uid", uid)
+                    startActivity(intent)
+                    cartAdapter?.notifyDataSetChanged()
+                }
             }
 
         }
